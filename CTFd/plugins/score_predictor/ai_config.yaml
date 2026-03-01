@@ -1,0 +1,12 @@
+name: LemonAPI Config
+version: 1.0.0
+schema: v1
+
+models:
+  - name: qwen3.5-plus
+    provider: aliyun
+    model: qwen3.5-plus
+    apiBase: https://coding.dashscope.aliyuncs.com/v1
+    apiKey: sk-sp-0abc75fe890c4ec5b9d2b9b5cae2ed05
+
+defaultModel: qwen3.5-plus

@@ -16,12 +16,30 @@ services:
     volumes:
       - .data/CTFd/logs:/var/log/CTFd
       - .data/CTFd/uploads:/var/uploads
-      - .:/opt/CTFd:ro
+      - .:/opt/CTFd
     depends_on:
       - db
+    dns:
+      - 223.5.5.5
+      - 8.8.8.8
     networks:
-        default:
-        internal:
+      default:
+      internal:
+
+        
+  # 【新增】：3D 态势感知大屏前端服务
+  ctfd-3ds:
+    build:
+      context: ./CTFD-3DS # 指向你大屏源码所在的文件夹路径 (请确保路径正确)
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80" # 将宿主机的 8080 端口映射到大屏容器的 80 端口
+    depends_on:
+      - ctfd # 确保后端启动后大屏才启动
+    networks:
+      default:
+      internal:
+    restart: always
 
   nginx:
     image: nginx:stable
@@ -29,7 +47,7 @@ services:
     volumes:
       - ./conf/nginx/http.conf:/etc/nginx/nginx.conf
     ports:
-      - 80:80
+      - "80:80"
     depends_on:
       - ctfd
 
@@ -44,20 +62,26 @@ services:
       - MARIADB_AUTO_UPGRADE=1
     volumes:
       - .data/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306" # 暴露给宿主机的影子预测进程
     networks:
-        internal:
-    # This command is required to set important mariadb defaults
-    command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0]
+      internal:
+        # This command is required to set important mariadb defaults
+        # 强制让 MariaDB 监听 0.0.0.0，允许宿主机访问
+    command: [ mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0, --bind-address=0.0.0.0 ]
 
   cache:
     image: redis:4
     restart: always
     volumes:
-    - .data/redis:/data
+      - .data/redis:/data
+    ports:
+      - "6379:6379" # 暴露 Redis 给宿主机影子进程
     networks:
-        internal:
+      internal:
+
 
 networks:
-    default:
-    internal:
-        internal: true
+  default:
+  internal:
+    internal: true

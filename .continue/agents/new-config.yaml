@@ -1,0 +1,27 @@
+name: LemonAPI Config
+version: 1.0.0
+schema: v1
+
+models:
+  - name: Gemini-2.5-pro
+    provider: openai
+    model: gemini-2.5-pro
+    apiBase: https://new.lemonapi.site/v1
+    apiKey: sk-rKXd5SaX4GtnB3ZsBQ0iL5DKkP1bOxzuaDpdJrc4DojulMUO
+    stream: false
+
+  - name: Gemini-3-flash-preview
+    provider: openai
+    model: gemini-3-flash-preview
+    apiBase: https://new.lemonapi.site/v1
+    apiKey: sk-rKXd5SaX4GtnB3ZsBQ0iL5DKkP1bOxzuaDpdJrc4DojulMUO
+    stream: false
+
+  - name: Gemini-3-pro-preview
+    provider: openai
+    model: gemini-3-pro-preview
+    apiBase: https://new.lemonapi.site/v1
+    apiKey: sk-rKXd5SaX4GtnB3ZsBQ0iL5DKkP1bOxzuaDpdJrc4DojulMUO
+    stream: false
+
+defaultModel: gemini-3-pro-preview
